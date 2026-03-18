@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세종시 AI 동호회</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        :root {
+            --primary: #059669; /* Green */
+            --primary-dark: #047857;
+            --dark-gray: #333333;
+            --light-gray: #f9fafb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            color: var(--dark-gray);
+            line-height: 1.6;
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; margin-bottom: 1rem; }
+        h2 { font-size: 2.5rem; margin-bottom: 2rem; text-align: center; color: var(--dark-gray); }
+        p { font-size: 1.1rem; color: #555; }
+
+        /* General Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        /* Scroll Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.4);
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            color: var(--white);
+            padding: 0 2rem;
+            position: relative;
+        }
+        #hero h1 { font-size: 4.5rem; margin-bottom: 1rem; color: var(--white); letter-spacing: -1px; }
+        #hero p { font-size: 1.6rem; margin-bottom: 3rem; color: #e5e7eb; font-weight: 300; }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--white);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .scroll-down:hover { opacity: 1; }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        /* About Section */
+        #about { background-color: var(--white); text-align: center; }
+        #about p { max-width: 800px; margin: 0 auto; font-size: 1.3rem; line-height: 1.8; color: #4b5563; }
+        .highlight { color: var(--primary); font-weight: 700; }
+
+        /* Activities Section */
+        #activities { background-color: var(--light-gray); }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+        .card {
+            background: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-top: 5px solid transparent;
+        }
+        .card:hover { 
+            transform: translateY(-10px); 
+            border-top: 5px solid var(--primary);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background-color: #ecfdf5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        .card i { font-size: 2.5rem; color: var(--primary); }
+        .card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--dark-gray); }
+
+        /* Achievements Section */
+        #achievements { background-color: var(--primary); color: var(--white); text-align: center; }
+        #achievements h2 { color: var(--white); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        .stat-item { padding: 2rem; border-radius: 15px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+        .stat-item .number-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 5px;
+        }
+        .stat-item .number {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .stat-item .suffix { font-size: 2rem; font-weight: 700; }
+        .stat-item .label { font-size: 1.2rem; margin-top: 1rem; font-weight: 500; opacity: 0.9; }
+
+        /* Schedule & Location */
+        #schedule { background-color: var(--white); }
+        .info-box {
+            background: var(--light-gray);
+            padding: 3.5rem;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            max-width: 850px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        .info-row { display: flex; align-items: flex-start; gap: 2rem; }
+        .info-row .icon {
+            width: 60px;
+            height: 60px;
+            background: var(--white);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        .info-row i { font-size: 2rem; color: var(--primary); }
+        .info-content h3 { font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--dark-gray); }
+        .info-content p { font-size: 1.15rem; color: #4b5563; }
+
+        /* Join Section */
+        #join {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            text-align: center;
+            padding-bottom: 7rem;
+        }
+        #join h2 { color: var(--white); }
+        #join > p { margin-bottom: 3.5rem; color: #9ca3af; font-size: 1.2rem; }
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+        .contact-method {
+            background: #404040;
+            padding: 2rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            min-width: 320px;
+            text-align: left;
+            transition: transform 0.3s;
+        }
+        .contact-method:hover { transform: translateY(-5px); background: #4b5563; }
+        .contact-method i { font-size: 2.5rem; color: var(--primary); }
+        .contact-info strong { display: block; font-size: 1.2rem; margin-bottom: 0.3rem; color: var(--white); }
+        .contact-info span { color: #d1d5db; }
+
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: #6b7280;
+            text-align: center;
+            padding: 2.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 3rem; }
+            #hero p { font-size: 1.2rem; }
+            h2 { font-size: 2rem; }
+            .container { padding: 4rem 1.5rem; }
+            .info-box { padding: 2rem; }
+            .info-row { flex-direction: column; text-align: center; align-items: center; gap: 1rem; }
+            .contact-method { width: 100%; justify-content: flex-start; }
+            .stats-grid { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content fade-in">
+            <h1>세종시 AI 동호회</h1>
+            <p>"인공지능과 함께 성장하는 우리의 미래"</p>
+            <a href="#join" class="btn">가입 문의하기</a>
+        </div>
+        <a href="#about" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container fade-in">
+        <h2>동호회 소개</h2>
+        <p><span class="highlight">세종시 AI 동호회</span>는 인공지능 기술에 관심 있는 사람들이 모여 지식을 공유하고 함께 성장하는 커뮤니티입니다.<br>최신 AI 트렌드를 학습하고 실제 프로젝트에 적용하며 미래 역량을 키워갑니다.<br>비전공자부터 현업 개발자까지 누구에게나 열려 있습니다.</p>
+    </section>
+
+    <!-- Activities Section -->
+    <section id="activities">
+        <div class="container fade-in">
+            <h2>활동 내용</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon-wrapper"><i class="fas fa-users"></i></div>
+                    <h3>정기 모임</h3>
+                    <p>월 1회 오프라인 정기 모임을 통해 네트워킹 및 지식 공유의 시간을 가집니다. 자유로운 주제 발표와 토론이 진행됩니다.</p>
+                </div>
+                <div class="card">
+                    <div class="icon-wrapper"><i class="fas fa-laptop-code"></i></div>
+                    <h3>AI 도구 실습</h3>
+                    <p>ChatGPT, Midjourney 등 최신 생성형 AI 도구 활용법과 자동화 파이프라인 구축 노하우를 직접 실습하고 나눕니다.</p>
+                </div>
+                <div class="card">
+                    <div class="icon-wrapper"><i class="fas fa-project-diagram"></i></div>
+                    <h3>프로젝트 협업</h3>
+                    <p>회원들의 아이디어를 모아 서비스나 앱을 기획하고, 개발부터 런칭까지 공동으로 참여하여 포트폴리오를 만듭니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements">
+        <div class="container fade-in">
+            <h2>우리의 발자취</h2>
+            <div class="stats-grid" id="counter">
+                <div class="stat-item">
+                    <div class="number-wrapper">
+                        <span class="number count" data-target="3">0</span>
+                        <span class="suffix">년째</span>
+                    </div>
+                    <div class="label">동호회 운영 기간 (2023~)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number-wrapper">
+                        <span class="number count" data-target="26">0</span>
+                        <span class="suffix">명</span>
+                    </div>
+                    <div class="label">함께 성장하는 회원 수</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number-wrapper">
+                        <span class="number count" data-target="15">0</span>
+                        <span class="suffix">건+</span>
+                    </div>
+                    <div class="label">협업 프로젝트 및 실습 완료</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule & Location Section -->
+    <section id="schedule" class="container fade-in">
+        <h2>모임 안내</h2>
+        <div class="info-box">
+            <div class="info-row">
+                <div class="icon"><i class="far fa-calendar-alt"></i></div>
+                <div class="info-content">
+                    <h3>모임 일정</h3>
+                    <p>매월 셋째 주 목요일 19:00 ~ 21:00 (진행 상황에 따라 변동 가능)</p>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="info-content">
+                    <h3>모임 장소</h3>
+                    <p>세종시청 2층 정보화교육실<br><span style="font-size: 0.95rem; color: #6b7280; display: inline-block; margin-top: 0.3rem;">(세종특별자치시 한누리대로 2130, 무료 주차 가능)</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Section -->
+    <section id="join">
+        <div class="container fade-in">
+            <h2>함께하시겠어요?</h2>
+            <p>AI에 대한 열정과 배우고자 하는 의지말 있다면 누구나 환영합니다.<br>지금 바로 가입을 문의해 주세요!</p>
+            
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <i class="fas fa-comment-dots"></i>
+                    <div class="contact-info">
+                        <strong>카카오톡 오픈채팅</strong>
+                        <span>검색창에 '세종시 AI 동호회' 검색</span>
+                    </div>
+                </div>
+                <div class="contact-method">
+                    <i class="fas fa-envelope"></i>
+                    <div class="contact-info">
+                        <strong>이메일 문의</strong>
+                        <span>contact@sejongai.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="javascript:alert('가입 신청 폼으로 이동합니다.');" class="btn" style="padding: 1.2rem 4rem; font-size: 1.3rem;">가입 신청서 작성하기</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 세종시 AI 동호회. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Scroll Animation Observer for fading in elements
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Trigger Counter Animation if the achievements section is visible
+                    if (entry.target.id === 'counter' || entry.target.querySelector('#counter')) {
+                        startCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Counter Animation Logic
+        let countersStarted = false;
+        function startCounters() {
+            if (countersStarted) return;
+            countersStarted = true;
+
+            const counters = document.querySelectorAll('.count');
+            const duration = 2000; // Animation duration in milliseconds
+
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const start = 0;
+                
+                // Using requestAnimationFrame for smoother animation
+                let startTime = null;
+
+                const step = (timestamp) => {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    
+                    // Add easing (easeOutQuart)
+                    const easeProgress = 1 - Math.pow(1 - progress, 4);
+                    
+                    counter.innerText = Math.floor(easeProgress * (target - start) + start);
+                    
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                
+                window.requestAnimationFrame(step);
+            });
+        }
+    </script>
+</body>
+</html>
